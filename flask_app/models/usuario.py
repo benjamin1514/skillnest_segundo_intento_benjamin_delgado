@@ -44,13 +44,13 @@ class Usuario:
             INSERT INTO usuarios (nombre, apellido, email, password_hash)
             VALUES (%(nombre)s, %(apellido)s, %(email)s, %(password_hash)s);
         """
-        return connectToMySQL('CinePedia').query_db(query, data)
+        return connectToMySQL('querido_diario').query_db(query, data)
 
     # permite obtener un usuario por su correo electrónico
     @classmethod
     def get_by_email(cls, email):
         query = "SELECT * FROM usuarios WHERE email = %(email)s;"
-        result = connectToMySQL('CinePedia').query_db(query, {'email': email})
+        result = connectToMySQL('querido_diario').query_db(query, {'email': email})
         if result:
             return cls(result[0])
         return None
@@ -59,7 +59,7 @@ class Usuario:
     @classmethod
     def get_by_id(cls, id):
         query = "SELECT * FROM usuarios WHERE id_usuario = %(id_usuario)s;"
-        result = connectToMySQL('CinePedia').query_db(query, {'id_usuario': id})
+        result = connectToMySQL('querido_diario').query_db(query, {'id_usuario': id})
         if result:
             return cls(result[0])
         return None
