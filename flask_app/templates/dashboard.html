@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueridoDiario - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>QueridoDiario</h1>
+
+        <nav>
+            <a href="/entradas/nueva">Nueva Entrada</a>
+            <a href="/logout">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2>Bienvenido, {{ session.get('usuario_nombre', 'Usuario') }}</h2>
+            <p>Este es tu espacio personal para guardar tus recuerdos.</p>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="messages">
+            {% for category, message in messages %}
+            <p class="message {{ category }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Buscador -->
+        <section class="search-section">
+            <form action="/buscar" method="GET" class="search-form">
+                <input type="search" name="termino" placeholder="Término a buscar..."
+                    value="{{ request.args.get('termino', '') }}" aria-label="Buscar en mis entradas" required>
+                <button type="submit">Buscar</button>
+            </form>
+        </section>
+
+        <!-- Lista de entradas -->
+        <section class="entries-section">
+            <h2>Mis entradas</h2>
+
+            {% if entradas %}
+            <div class="entries-grid">
+                {% for entrada in entradas %}
+                <article class="entry-card">
+                    <div class="entry-content">
+                        <span class="entry-label">Entrada</span>
+
+                        <h3>
+                            {{ entrada.fecha_entrada.strftime('%Y-%m-%d')
+                            if entrada.fecha_entrada.strftime is defined
+                            else entrada.fecha_entrada }}
+                        </h3>
+
+                        <p class="entry-preview">
+                            {{ entrada.nota[:120] }}{% if entrada.nota|length > 120 %}...{% endif %}
+                        </p>
+                    </div>
+
+                    <div class="entry-actions">
+                        <a class="btn" href="/entradas/editar/{{ entrada.id_entrada }}">
+                            Editar
+                        </a>
+
+                        <form action="/entradas/borrar/{{ entrada.id_entrada }}" method="POST"
+                            onsubmit="return confirm('¿Seguro que quieres borrar esta entrada?');">
+                            <button class="btn btn-delete" type="submit">
+                                Borrar
+                            </button>
+                        </form>
+
+                        <a class="btn" href="/entradas/{{ entrada.id_entrada }}">
+                            Ver
+                        </a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h3>Aún no tienes entradas</h3>
+                <p>Comienza escribiendo el primer recuerdo de tu diario.</p>
+                <a class="btn btn-create" href="/entradas/nueva">
+                    Crear mi primera entrada
+                </a>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>QueridoDiario · Tus recuerdos, tus historias.</p>
+    </footer>
+</body>
+
+</html>

@@ -38,3 +38,21 @@ def registro():
 
     return redirect('/dashboard')
 
+@app.route('/login', methods=['POST'])
+def login():
+    # Verificar si el correo electrónico está registrado
+    user = Usuario.get_by_email(request.form['email'])
+    if not user:
+        flash("Correo electrónico o contraseña incorrectos.", "error_login")
+        return redirect('/')
+
+    # Verificar la contraseña
+    if not bcrypt.check_password_hash(user.password_hash, request.form['password']):
+        flash("Correo electrónico o contraseña incorrectos.", "error_login")
+        return redirect('/')
+
+    # Guardar el id del usuario en la sesión
+    session['user_id'] = user.id_usuario
+
+    return redirect('/dashboard')
+

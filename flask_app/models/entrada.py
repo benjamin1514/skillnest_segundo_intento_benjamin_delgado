@@ -16,5 +16,15 @@ class Entrada:
             INSERT INTO entradas (fecha_entrada, notas, id_usuario)
             VALUES (%(fecha_entrada)s, %(notas)s, %(id_usuario)s);
         """
-        return connectToMySQL('CinePedia').query_db(query, data)
+        return connectToMySQL('querido_diario').query_db(query, data)
+    
+    @classmethod
+    def get_by_usuario(cls, data):
+        query = "SELECT * FROM entradas WHERE id_usuario = %(id_usuario)s;"
+        result = connectToMySQL('querido_diario').query_db(query, data)
+        entradas = []
+        for entrada in result:
+            entradas.append(cls(entrada))
+        return entradas
+    
     

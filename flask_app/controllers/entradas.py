@@ -1,7 +1,9 @@
-from flask_app import render_template, redirect, request, session, flash
+from flask import render_template, redirect, request, session, flash
 from flask_app import app
 from flask_app.models.entrada import Entrada
 from datetime import date
+
+
 
 @app.route('/dashboard')
 def dashboard():

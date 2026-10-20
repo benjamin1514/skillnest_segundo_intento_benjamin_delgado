@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinePedia - Registro / Inicio de Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Registro / Inicio de Sesión</h1>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages(category_filter=["registro"]) %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li style="color: red;">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <section>
+            <h2>Registro</h2>
+            <form action="/registro" method="POST">
+                <div>
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre"
+                        value="{{ request.form.nombre if request.form.nombre else '' }}" required minlength="2">
+                </div>
+                <div>
+                    <label for="apellido">Apellido</label>
+                    <input type="text" id="apellido" name="apellido"
+                        value="{{ request.form.apellido if request.form.apellido else '' }}" required minlength="2">
+                </div>
+                <div>
+                    <label for="email_reg">E-mail</label>
+                    <input type="email" id="email_reg" name="email"
+                        value="{{ request.form.email if request.form.email else '' }}" required>
+                </div>
+                <div>
+                    <label for="password_reg">Contraseña</label>
+                    <input type="password" id="password_reg" name="password" required>
+                </div>
+                <div>
+                    <label for="confirm_password">Conf. Contraseña</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+                <div>
+                    <button type="submit">Registrar</button>
+                </div>
+            </form>
+        </section>
+
+        {% with messages = get_flashed_messages(category_filter=["login"]) %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li style="color: red;">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <section>
+            <h2>Inicio de Sesión</h2>
+            <form action="/login" method="POST">
+                <div>
+                    <label for="email_login">E-mail</label>
+                    <input type="email" id="email_login" name="email" required>
+                </div>
+                <div>
+                    <label for="password_login">Contraseña</label>
+                    <input type="password" id="password_login" name="password" required>
+                </div>
+                <div>
+                    <button type="submit">Iniciar Sesión</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>
