@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueridoDiario - Nueva Entrada</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nueva_entrada.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Nueva Entrada</h1>
+    </header>
+
+    <nav>
+        <a href="/dashboard">Inicio</a>
+        <a href="/logout">Cerrar Sesión</a>
+    </nav>
+
+    <main>
+        <h2>Nueva Entrada</h2>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form action="/entradas/crear" method="POST">
+            <div>
+                <label for="fecha_entrada">Fecha Entrada:</label>
+                <input type="date" id="fecha_entrada" name="fecha_entrada" required>
+            </div>
+
+            <div>
+                <label for="nota">Notas:</label>
+                <textarea id="nota" name="nota" rows="6" cols="30"
+                    required></textarea>
+            </div>
+
+            <div>
+                <button type="submit">Guardar</button>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>

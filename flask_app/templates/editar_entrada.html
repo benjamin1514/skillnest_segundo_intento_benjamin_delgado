@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueridoDiario - Editar Entrada</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/editar_entrada.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Editar Entrada</h1>
+        <nav>
+            <a href="/dashboard">Inicio</a>
+            <a href="/logout">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Editar Entrada</h2>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <p class="mensaje-error">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form action="/editar_entrada/{{ entrada.id_entrada }}" method="POST">
+
+            <div>
+                <label for="fecha_entrada">Fecha Entrada:</label>
+                <input type="date" id="fecha_entrada" name="fecha_entrada"
+                    value="{{ form_data['fecha_entrada'] if form_data else entrada.fecha_entrada.strftime('%Y-%m-%d') }}"
+                    required>
+            </div>
+
+            <div>
+                <label for="nota">Notas:</label>
+                <textarea id="nota" name="nota" rows="6" minlength="3"
+                    required>{{ form_data['nota'] if form_data else entrada.nota }}</textarea>
+            </div>
+
+            <div>
+                <button type="submit">Guardar</button>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>

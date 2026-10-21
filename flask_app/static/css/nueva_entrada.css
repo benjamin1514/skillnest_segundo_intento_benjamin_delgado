@@ -1,0 +1,44 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+header {
+    background-color: #ccc;
+    text-align: center;
+    padding: 10px;
+}
+
+nav {
+    text-align: right;
+    padding: 10px;
+}
+
+nav a {
+    margin: 10px;
+}
+
+main {
+    padding: 20px;
+}
+
+form div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: inline-block;
+    width: 110px;
+}
+
+textarea {
+    width: 200px;
+    height: 100px;
+}
+
+button {
+    margin-left: 110px;
+    padding: 5px 15px;
+    cursor: pointer;
+}

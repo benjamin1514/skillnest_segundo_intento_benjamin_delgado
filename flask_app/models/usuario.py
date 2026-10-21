@@ -63,3 +63,11 @@ class Usuario:
         if result:
             return cls(result[0])
         return None
+    
+    @classmethod
+    def no_fechas_futuras ():
+        query = "SELECT * FROM entradas WHERE fecha_entrada > CURDATE();"
+        result = connectToMySQL('querido_diario').query_db(query)
+        if result:
+            return True
+        return False
