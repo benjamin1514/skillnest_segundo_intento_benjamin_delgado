@@ -1,9 +1,8 @@
+# Gestiona acceso de usuarios
 from flask import render_template, redirect, request, session, flash
 from flask_app import app
 from flask_app.models.usuario import Usuario
-from flask_bcrypt import Bcrypt
-
-bcrypt = Bcrypt(app)
+import bcrypt
 
 @app.route('/')
 def index():
@@ -22,7 +21,10 @@ def registro():
         return redirect('/')
 
     # Encriptar la contraseña
-    password_hash = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+    password_hash = bcrypt.hashpw(
+        request.form['password'].encode('utf-8'),
+        bcrypt.gensalt()
+    ).decode('utf-8')
 
     # Crear un nuevo usuario
     data = {
@@ -47,7 +49,10 @@ def login():
         return redirect('/')
 
     # Verificar la contraseña
-    if not bcrypt.check_password_hash(user.password_hash, request.form['password']):
+    if not bcrypt.checkpw(
+        request.form['password'].encode('utf-8'),
+        user.password_hash.encode('utf-8')
+    ):
         flash("Correo electrónico o contraseña incorrectos.", "error_login")
         return redirect('/')
 
@@ -55,4 +60,3 @@ def login():
     session['user_id'] = user.id_usuario
 
     return redirect('/dashboard')
-

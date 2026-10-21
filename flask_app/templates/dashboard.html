@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Panel principal del usuario -->
 <html lang="es">
 
 <head>
@@ -8,19 +9,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 
-<body>
-    <header>
-        <h1>QueridoDiario</h1>
+<body class="bg-dark text-light">
+    <header class="navbar navbar-expand-lg navbar-dark bg-danger px-3 px-lg-5">
+        <h1 class="navbar-brand mb-0">QueridoDiario</h1>
 
-        <nav>
-            <a href="/entradas/nueva">Nueva Entrada</a>
-            <a href="/logout">Cerrar Sesión</a>
+        <nav class="d-flex gap-2">
+            <a class="btn btn-light text-danger" href="/entradas/nueva">Nueva Entrada</a>
+            <a class="btn btn-outline-light" href="/logout">Cerrar Sesión</a>
         </nav>
     </header>
 
-    <main>
-        <section class="welcome">
-            <h2>Bienvenido, {{ session.get('usuario_nombre', 'Usuario') }}</h2>
+    <main class="container py-4">
+        <section class="welcome card card-body border-0 bg-secondary text-light mb-4">
+            <h2 class="h3 text-danger">Bienvenido, {{ session.get('usuario_nombre', 'Usuario') }}</h2>
             <p>Este es tu espacio personal para guardar tus recuerdos.</p>
         </section>
 
@@ -28,67 +29,69 @@
         {% if messages %}
         <div class="messages">
             {% for category, message in messages %}
-            <p class="message {{ category }}">{{ message }}</p>
+            <p class="message alert alert-info mb-2">{{ message }}</p>
             {% endfor %}
         </div>
         {% endif %}
         {% endwith %}
 
         <!-- Buscador -->
-        <section class="search-section">
-            <form action="/buscar" method="GET" class="search-form">
-                <input type="search" name="termino" placeholder="Término a buscar..."
+        <section class="search-section mb-4">
+            <form action="/buscar" method="GET" class="search-form input-group">
+                <input class="form-control" type="search" name="termino" placeholder="Término a buscar..."
                     value="{{ request.args.get('termino', '') }}" aria-label="Buscar en mis entradas" required>
-                <button type="submit">Buscar</button>
+                <button class="btn btn-danger" type="submit">Buscar</button>
             </form>
         </section>
 
         <!-- Lista de entradas -->
         <section class="entries-section">
-            <h2>Mis entradas</h2>
+            <h2 class="h3 text-danger mb-3">Mis entradas</h2>
 
             {% if entradas %}
-            <div class="entries-grid">
+            <div class="entries-grid row g-3">
                 {% for entrada in entradas %}
-                <article class="entry-card">
-                    <div class="entry-content">
-                        <span class="entry-label">Entrada</span>
+                <article class="col-12 col-md-6 col-lg-4">
+                    <div class="entry-card card h-100 shadow-sm">
+                        <div class="entry-content card-body">
+                            <span class="entry-label badge text-bg-danger">Entrada</span>
 
-                        <h3>
+                            <h3 class="h5 mt-2">
                             {{ entrada.fecha_entrada.strftime('%Y-%m-%d')
                             if entrada.fecha_entrada.strftime is defined
                             else entrada.fecha_entrada }}
-                        </h3>
+                            </h3>
 
-                        <p class="entry-preview">
+                            <p class="entry-preview card-text">
                             {{ entrada.nota[:120] }}{% if entrada.nota|length > 120 %}...{% endif %}
-                        </p>
-                    </div>
+                            </p>
+                        </div>
 
-                    <div class="entry-actions">
-                        <a class="btn" href="/editar_entrada/{{ entrada.id_entrada }}">
-                            Editar
-                        </a>
+                        <div class="entry-actions card-footer bg-transparent border-0 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-danger btn-sm" href="/editar_entrada/{{ entrada.id_entrada }}">
+                                Editar
+                            </a>
 
-                        <form action="/entradas/borrar/{{ entrada.id_entrada }}" method="POST"
-                            onsubmit="return confirm('¿Seguro que quieres borrar esta entrada?');">
-                            <button class="btn btn-delete" type="submit">
-                                Borrar
-                            </button>
-                        </form>
+                            <form action="/eliminar_entrada/{{ entrada.id_entrada }}" method="POST"
+                                onsubmit="return confirm('¿Seguro que quieres borrar esta entrada?');">
+                                <button class="btn btn-danger btn-sm" type="submit">
+                                    Borrar
+                                </button>
+                            </form>
 
-                        <a class="btn" href="/entradas/{{ entrada.id_entrada }}">
-                            Ver
-                        </a>
+                            <a class="btn btn-danger btn-sm" href="/ver/{{ entrada.id_entrada }}">
+                                Ver
+                            </a>
+                        </div>
                     </div>
                 </article>
                 {% endfor %}
             </div>
             {% else %}
-            <div class="empty-state">
+            <div class="empty-state card card-body text-center border-0 shadow-sm">
                 <h3>Aún no tienes entradas</h3>
                 <p>Comienza escribiendo el primer recuerdo de tu diario.</p>
-                <a class="btn btn-create" href="/entradas/nueva">
+                <a class="btn btn-danger align-self-center" href="/entradas/nueva">
                     Crear mi primera entrada
                 </a>
             </div>
@@ -96,7 +99,7 @@
         </section>
     </main>
 
-    <footer>
+    <footer class="text-center text-secondary py-3">
         <p>QueridoDiario · Tus recuerdos, tus historias.</p>
     </footer>
 </body>

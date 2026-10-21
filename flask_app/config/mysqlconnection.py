@@ -1,3 +1,4 @@
+# Administra conexiones MySQL
 import os
 import pymysql.cursors
 from dotenv import load_dotenv
@@ -22,7 +23,6 @@ class MySQLConnection:
     def query_db(self, query, data=None):
         with self.connection.cursor() as cursor:
             try:
-                query = cursor.mogrify(query, data)
                 print(f"Ejecutando Consulta: {query}")
                 cursor.execute(query, data)
 

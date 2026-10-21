@@ -1,4 +1,5 @@
 
+# Define operaciones de entradas
 from flask_app.config.mysqlconnection import connectToMySQL
 
 class Entrada:
@@ -60,6 +61,15 @@ class Entrada:
         """
         return connectToMySQL('querido_diario').query_db(query, data)
 
+    @classmethod
+    def delete(cls, data):
+        query = """
+            DELETE FROM entradas
+            WHERE id_entrada = %(id_entrada)s
+            AND id_usuario = %(id_usuario)s;
+        """
+        return connectToMySQL('querido_diario').query_db(query, data)
+
     # Validar los mismos campos al crear y editar
     @staticmethod
     def validar_entrada(data):
@@ -71,4 +81,26 @@ class Entrada:
 
         return True
 
+    @classmethod
+    def buscar_por_usuario(cls, data):
+        query = """
+            SELECT * FROM entradas
+            WHERE id_usuario = %(id_usuario)s
+            AND nota LIKE %(termino)s
+            ORDER BY fecha_entrada DESC;
+        """
 
+        datos = {
+            'id_usuario': data['id_usuario'],
+            'termino': '%' + data['termino'].strip() + '%'
+        }
+
+        resultado = connectToMySQL('querido_diario').query_db(query, datos)
+
+        entradas = []
+
+        if resultado:
+            for fila in resultado:
+                entradas.append(cls(fila))
+
+        return entradas

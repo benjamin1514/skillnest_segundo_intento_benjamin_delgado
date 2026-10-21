@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<!-- Detalle de entrada -->
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueridoDiario - Ver Entrada</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/ver_entrada.css') }}">
+</head>
+
+<body class="bg-dark text-light">
+    <header class="d-flex flex-wrap align-items-center justify-content-between gap-3 py-3 px-3 px-lg-5 bg-danger text-white">
+        <h1 class="h3 mb-0">QueridoDiario</h1>
+        <nav class="d-flex gap-2">
+            <a class="btn btn-outline-light btn-sm" href="/dashboard">Inicio</a>
+            <a class="btn btn-outline-light btn-sm" href="/logout">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <main class="container py-4">
+        <article class="card border-0 shadow-sm">
+            <div class="card-body p-4 bg-secondary text-light">
+            <h2 class="h4 text-danger mb-3">Entrada de {{ entrada.fecha_entrada.strftime('%Y-%m-%d') }}</h2>
+            <p class="nota card-text">{{ entrada.nota }}</p>
+            </div>
+        </article>
+    </main>
+</body>
+
+</html>

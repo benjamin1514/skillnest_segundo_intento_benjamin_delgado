@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- Resultados de búsqueda -->
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueridoDiario - Buscar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/buscar_entrada.css') }}">
+</head>
+
+<body class="bg-dark text-light">
+    <header class="d-flex flex-wrap align-items-center justify-content-between gap-3 py-3 px-3 px-lg-5 bg-danger text-white">
+        <h1 class="h3 mb-0">Buscar Entradas</h1>
+
+        <form action="/buscar" method="GET" class="input-group w-auto flex-grow-1">
+            <input class="form-control" type="text" name="termino" placeholder="Buscar en mis notas..." value="{{ termino }}" required>
+            <button class="btn btn-light text-danger" type="submit">Buscar</button>
+        </form>
+
+        <nav class="d-flex gap-2">
+            <a class="btn btn-outline-light btn-sm" href="/dashboard">Inicio</a>
+            <a class="btn btn-outline-light btn-sm" href="/logout">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <main class="container py-4">
+        {% if termino %}
+        <h2 class="h4 text-danger mb-3">Resultados para: {{ termino }}</h2>
+        {% endif %}
+
+        <section class="entradas row g-3">
+            {% for entrada in entradas %}
+            <article class="tarjeta col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body bg-secondary text-light">
+                <h3 class="h5 text-danger">Entrada</h3>
+
+                <p class="fecha text-secondary small mb-2">
+                    {{ entrada.fecha_entrada.strftime('%Y-%m-%d') }}
+                </p>
+
+                <p class="nota card-text">{{ entrada.nota }}</p>
+                </div>
+
+                <div class="acciones card-footer bg-transparent border-0 d-flex flex-wrap gap-2">
+                    <a href="/editar_entrada/{{ entrada.id_entrada }}" class="boton btn btn-outline-danger btn-sm">Editar</a>
+
+                    <form action="/eliminar_entrada/{{ entrada.id_entrada }}" method="POST"
+                        onsubmit="return confirm('¿Seguro que quieres borrar esta entrada?');" class="m-0">
+                        <button type="submit" class="boton btn btn-danger btn-sm">Borrar</button>
+                    </form>
+
+                    <a href="/ver/{{ entrada.id_entrada }}" class="boton btn btn-danger btn-sm">Ver</a>
+                </div>
+                </div>
+            </article>
+            {% else %}
+            <p class="sin-resultados col-12 alert alert-light border">
+                {% if termino %}
+                No se encontraron entradas que contengan "{{ termino }}".
+                {% else %}
+                Escribe una palabra para buscar en tus notas.
+                {% endif %}
+            </p>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+
+</html>
